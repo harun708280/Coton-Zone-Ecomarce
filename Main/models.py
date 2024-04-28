@@ -93,5 +93,15 @@ class feature(models.Model):
         verbose_name_plural='Product Feature'
     
     
+class banner(models.Model):
+    women=models.ImageField(upload_to=None,verbose_name='Women Bennar Change',blank=True,null=True)
+    man=models.ImageField(upload_to=None,verbose_name='Man Bennar Change',blank=True,null=True)
+    kid=models.ImageField( upload_to=None,verbose_name='Kid’s fashion Benner Change' ,blank=True,null=True)
+    cos=models.ImageField( upload_to=None, verbose_name='Cosmetics Benner Change',blank=True,null=True)
+    acc=models.ImageField( upload_to=None, verbose_name='Accessories Benner Change',blank=True,null=True)
+    name=models.CharField( max_length=50,verbose_name='Product Cetagory Name',blank=False,null=False)
+    
+    def __str__(self):
+        return self.name
     
     

@@ -25,5 +25,9 @@ urlpatterns = [
     path('man/',views.man,name='man'),
     path('women/',views.women,name='women'),
     path('error/',views.carterror,name='eror'),
-    path('discaunt/',views.discaunt,name='discaunt')
+    path('discaunt/',views.discaunt,name='discaunt'),
+    path('kids/',views.kids,name='kids'),
+    path('Accessories/',views.Accessories,name='Accessories'),
+    path('Cos/',views.Cosmetics,name='Cos'),
+    
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

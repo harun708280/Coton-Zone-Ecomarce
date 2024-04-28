@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from .form import RegestrationForm
 from django.contrib import messages
-from.models import Product,Cetagory,Cart,Best_sels,hottrend,feature
+from.models import *
 from django.views import View
 from django.db.models import Q
 from django.http import JsonResponse
@@ -13,9 +13,17 @@ def home(request):
     bs=Best_sels.objects.all()[:4]
     ht=hottrend.objects.all()[:4]
     f=feature.objects.all()[:4]
+    ct=Cetagory.objects.get(name='Man')
+    pf=Product.objects.filter(cetagory=ct)
+    ma=banner.objects.filter(name='Men’s Fashion')
+    acc=banner.objects.filter(name='Accessories')
+    w=banner.objects.filter(name='Women’s Fashion')
+    kids=banner.objects.filter(name='Kid’s Fashion')
+    cos=banner.objects.filter(name='Cosmetics')
     
     
-    return render(request,'index.html',{'p':pro,'pt':pt,'bs':bs,'ht':ht,'f':f})
+    
+    return render(request,'index.html',{'p':pro,'pt':pt,'bs':bs,'ht':ht,'f':f,'pf':pf,'m':ma,'a':acc,'w':w,'k':kids,'c':cos})
 class ProductdetailsView(View):
     def get(self,request,pk):
         if request.user.is_authenticated:
@@ -155,3 +163,18 @@ def discaunt(request):
     po=Cetagory.objects.get(name='Discaunt')
     p=Product.objects.filter(cetagory=po)
     return render(request,'discaunt.html',{'p':p})
+
+def kids(request):
+    pc=Cetagory.objects.get(name='Kid’s fashion')
+    p=Product.objects.filter(cetagory=pc)
+    return render(request,'kids.html',locals())
+
+def Accessories(request):
+    pc=Cetagory.objects.get(name='Accessories')
+    p=Product.objects.filter(cetagory=pc)
+    return render(request,'accessoris.html',locals())
+
+def Cosmetics(request):
+    pc=Cetagory.objects.get(name='Cosmetics')
+    p=Product.objects.filter(cetagory=pc)
+    return render(request,'Cosmetics.html',locals())

@@ -7,65 +7,54 @@
     <section class="categories">
         <div class="container-fluid">
             <div class="row">
-               
                 <div class="col-lg-6 p-0">
-                    {% for w in w %}
                     <div class="categories__item categories__large__item set-bg"
-                    data-setbg="{{w.women.url}}">
+                    data-setbg="{% static "img/categories/pexels-juan-mendez-1536619.jpg" %}">
                     <div class="categories__text">
-                        <h1>{{w.name}}</h1>
-                        
-                        <a href="{% url "women" %}">Shop now</a>
+                        <h1>Women’s fashion</h1>
+                        <p>Sitamet, consectetur adipiscing elit, sed do eiusmod tempor incidid-unt labore
+                        edolore magna aliquapendisse ultrices gravida.</p>
+                        <a href="#">Shop now</a>
                     </div>
-                    {% endfor %}
                 </div>
-                
             </div>
             <div class="col-lg-6">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        {% for m in m %}
-                        <div class="categories__item set-bg" data-setbg="{{m.man.url}}">
+                        <div class="categories__item set-bg" data-setbg="{% static "img/categories/category-2.jpg" %}">
                             <div class="categories__text">
-                                <h4>{{m.name}}</h4>
-                                
-                                <a href="{% url "man" %}">Shop now</a>
+                                <h4>Men’s fashion</h4>
+                                <p>358 items</p>
+                                <a href="#">Shop now</a>
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        {% for k in k %}
-                        <div class="categories__item set-bg" data-setbg="{{k.kid.url}}">
+                        <div class="categories__item set-bg" data-setbg="{% static "img/categories/category-3.jpg" %}">
                             <div class="categories__text">
-                                <h4>{{k.name}}</h4>
-                                
-                                <a href="{% url "kids" %}">Shop now</a>
+                                <h4>Kid’s fashion</h4>
+                                <p>273 items</p>
+                                <a href="#">Shop now</a>
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        {% for c in c %}
-                        <div class="categories__item set-bg" data-setbg="{{c.cos.url}}">
+                        <div class="categories__item set-bg" data-setbg="{% static "img/categories/category-4.jpg" %}">
                             <div class="categories__text">
-                                <h4 class='text-werning'>{{c.name}}</h4>
-                             
-                                <a href="{% url "Cos" %}">Shop now</a>
+                                <h4>Cosmetics</h4>
+                                <p>159 items</p>
+                                <a href="#">Shop now</a>
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        {% for a in a %}
-                        <div class="categories__item set-bg" data-setbg="{{a.acc.url}}">
+                        <div class="categories__item set-bg" data-setbg="{% static "img/categories/category-5.jpg" %}">
                             <div class="categories__text">
                                 <h4>Accessories</h4>
-                                
-                                <a href="{% url "Accessories" %}">Shop now</a>
+                                <p>792 items</p>
+                                <a href="#">Shop now</a>
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -84,13 +73,13 @@
                 </div>
             </div>
             <div class="col-lg-8 col-md-8">
-                <ul class="filter__controls ">
-                    <li  ><a href="{% url "shop" %} " class='text-secondary'>All</a></li>
-                    <li ><a href="{% url "women" %}"class='text-secondary'>Women’s</a></li>
-                    <li ><a href="{% url "man" %}"class='text-secondary'>Men’s</a></li>
-                    <li ><a href="{% url "kids" %}" class='text-secondary'>Kid’s</a></li>
-                    <li ><a href="{% url "Accessories" %}" class='text-secondary'>Accessories</a></li>
-                    <li ><a href="{% url "Cos" %} "class=text-secondary>Cosmetics</li></a>
+                <ul class="filter__controls">
+                    <li class="active" data-filter="*">All</li>
+                    <li data-filter=".women">Women’s</li>
+                    <li data-filter=".men">Men’s</li>
+                    <li data-filter=".kid">Kid’s</li>
+                    <li data-filter=".accessories">Accessories</li>
+                    <li data-filter=".cosmetic">Cosmetics</li>
                 </ul>
             </div>
         </div>
@@ -127,19 +116,19 @@
 <!-- Product Section End -->
 
 <!-- Banner Section Begin -->
-<section class="banner set-bg" data-setbg="{% static "img/banner/h.jpg" %}">
+<section class="banner set-bg" data-setbg="{% static "img/banner/banner-1.jpg" %}">
     <div class="container">
         <div class="row">
             <div class="col-xl-7 col-lg-8 m-auto">
                 <div class="banner__slider owl-carousel">
                     {% for pt in pt %}
-                    {% if pt.name == 'Man' or pt.name == 'Women' or pt.name == 'Kid’s fashion' or pt.name == 'Accessories' or pt.name == 'Cosmetics' %}
+                    {% if pt.name == 'Man' or pt.name == 'Women' %}
                     <div class="banner__item">
                         
                         <div class="banner__text">
                             <span>The Product Collection</span>
                             <h1>The {{pt.name}} Zone </h1>
-                            <a href="{% if pt.name == 'Man' %} {% url "man" %} {% elif pt.name == 'Kid’s fashion' %} {% url "kids" %} {% elif pt.name == 'Accessories' %} {% url "Accessories" %} {% elif pt.name == 'Cosmetics' %} {% url "Cos" %} {% else %} {% url "women" %} {% endif %}">Shop now</a>
+                            <a href="{% if pt.name == 'Man' %} {% url "man" %} {% else %} {% url "women" %} {% endif %}">Shop now</a>
                         </div>
                         
                     </div>
