@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Checkout{% endblock title %}
+
+{% block content %}
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="{% url "home" %}"><i class="fa fa-home"></i> Home</a>
+                        <a href="#">{{pd.cetagory}} </a>
+                        <span>{{pd.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__left product__thumb nice-scroll">
+                            <a class="pt active" href="#product-1">
+                                <img src="{{pd.images1.url}}" alt="" class="product-image" style='width: 400; height: 200;'>
+                            </a>
+                            <a class="pt" href="#product-2">
+                                <img src="{{pd.images1.url}}" alt="">
+                            </a>
+                            <a class="pt" href="#product-3">
+                                <img src="{{pd.images1.url}}" alt="">
+                            </a>
+                            <a class="pt" href="#product-4">
+                                <img src="{{pd.images1.url}}" alt="">
+                            </a>
+                        </div>
+                        <div class="product__details__slider__content">
+                            <div class="product__details__pic__slider owl-carousel">
+                                <img data-hash="product-1" class="product__big__img" src="{{pd.images1.url}}" alt="">
+                                <img data-hash="product-2" class="product__big__img" src="{{pd.images1.url}}" alt="">
+                                <img data-hash="product-3" class="product__big__img" src="{{pd.images1.url}}" alt="">
+                                <img data-hash="product-4" class="product__big__img" src="{{pd.images1.url}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product__details__text">
+                        <h3>{{pd.name}} <span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <span>( 138 reviews )</span>
+                        </div>
+                        <div class="product__details__price">$ {{pd.price}}TK <span>{% if pd.old_price %}{{pd.old_price}}{% endif %}</span></div>
+                        <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
+                        magni lores eos qui ratione voluptatem sequi nesciunt.</p>
+                        <div class="product__details__button d-flex align-items-center">
+                            
+                            <div class="input-group quantity mb-5 rounded-pill" style="width: 100px;">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm text-center border-0" id="quantity" value="{{quantity}}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div> 
+                            <form action="/add-to-cart">
+                                <input type="hidden" name="prod_id" value="{{ pd.id }}" id="prod_id"> 
+                                <input type="hidden" name="product_quantity" id="product_quantity" value="1"> 
+                                <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 mb-4 text-white">
+                                    <span class="icon_bag_alt"></span> Add to Cart
+                                </button>
+                            </form>
+                        </div>
+                        
+                        
+                        <div class="product__details__widget">
+                            <ul>
+                                <li>
+                                    <span>Availability:</span>
+                                    <div class="stock__checkbox">
+                                        <label for="stockin">
+                                            In Stock
+                                            <input type="checkbox" id="stockin">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Available color:</span>
+                                    <div class="color__checkbox">
+                                        <label for="red">
+                                            <input type="radio" name="color__radio" id="red" checked>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label for="black">
+                                            <input type="radio" name="color__radio" id="black">
+                                            <span class="checkmark black-bg"></span>
+                                        </label>
+                                        <label for="grey">
+                                            <input type="radio" name="color__radio" id="grey">
+                                            <span class="checkmark grey-bg"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Available size:</span>
+                                    <div class="size__btn">
+                                        <label for="xs-btn" class="active">
+                                            <input type="radio" id="xs-btn">
+                                            xs
+                                        </label>
+                                        <label for="s-btn">
+                                            <input type="radio" id="s-btn">
+                                            s
+                                        </label>
+                                        <label for="m-btn">
+                                            <input type="radio" id="m-btn">
+                                            m
+                                        </label>
+                                        <label for="l-btn">
+                                            <input type="radio" id="l-btn">
+                                            l
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Promotions:</span>
+                                    <p>Free shipping</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Specification</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Reviews ( 2 )</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <h6>Description</h6>
+                                <p>{{pd.description}}</p>
+                                
+                            </div>
+                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                <h6>Specification</h6>
+                                <p>{{pd.description}}</p>
+                            </div>
+                            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                <h6>Reviews ( 2 )</h6>
+                                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
+                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
+                                    Neque porro lorem quisquam est, qui dolorem ipsum quia dolor si. Nemo enim ipsam
+                                    voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed quia ipsu
+                                    consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla
+                                consequat massa quis enim.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
+                                    dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
+                                    nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
+                                quis, sem.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="related__title">
+                        <h5>RELATED PRODUCTS</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    {% for r in r %}
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{r.images1.url}}">
+                            <div class="label new">New</div>
+                            <ul class="product__hover">
+                                <li><a href="{{r.images1.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="{% url 'product_details' r.id %}"><span class="icon_bag_alt"></span></a></li>
+
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">{{r.name}}</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">$ {{r.price}}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+
+  {% endblock content %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}jk{% endblock title %}
+
+
+{% block content %}
+<div class="alert alert-danger" role="alert">
+    <h3>Please fill in all required fields before submitting!!! <a href="{% url "registration" %}"> Return Registration</a></h3>
+</div>
+{% endblock content %}
