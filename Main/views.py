@@ -1,12 +1,21 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .form import RegestrationForm
+from .form import *
 from django.contrib import messages
 from.models import *
 from django.views import View
 from django.db.models import Q
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 # Create your views here.
+from django import template
+
+register = template.Library()
+
+@register.filter
+def get_range(value):
+    return range(value)
+
 def home(request):
     pro=Product.objects.all()[:8]
     pt=Cetagory.objects.all()
@@ -28,6 +37,8 @@ class ProductdetailsView(View):
     def get(self,request,pk):
         if request.user.is_authenticated:
             pd=Product.objects.get(pk=pk)
+            reviews=Review.objects.filter(product=pd)
+            comment_form=Review_From()
             related_product=Product.objects.filter(cetagory=pd.cetagory).exclude(pk=pk)
             quantity=1
             
@@ -37,10 +48,24 @@ class ProductdetailsView(View):
             
             except Cart.DoesNotExist:
                 quantity=1
-            return render(request,'product-details.html',{'pd':pd,'r':related_product,'quantity':quantity})
+            return render(request,'product-details.html',{'pd':pd,'rr':related_product,'quantity':quantity,'r':reviews,'cf':comment_form})
         
         else:
             return redirect('login')
+    
+    def post(self,request,pk):
+        product=Product.objects.get(pk=pk)
+        comment_form=Review_From(request.POST)
+        
+        if comment_form.is_valid():
+            new_review=comment_form.save(commit=False)
+            new_review.product=product
+            new_review.user=request.user
+            new_review.save()
+            return redirect('product_details',pk=pk)
+        
+        else:
+            return redirect('home')
 
 def cart(request):
     user = request.user
@@ -80,8 +105,15 @@ def delete_cart(request,id):
     return redirect('/cart')
             
 def shop(request):
-    p=Product.objects.all()[3:]
-    return render(request,'shop.html',locals())
+    p = Product.objects.all()
+    paginator = Paginator(p, 9)
+    page_number = request.GET.get('page')
+    
+    print("Page Number:", page_number) 
+    
+    datafinal = paginator.get_page(page_number)
+    return render(request, 'shop.html', {'p':datafinal})
+
 
 
 

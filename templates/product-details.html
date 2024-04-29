@@ -159,7 +159,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Specification</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Reviews ( 2 )</a>
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Reviews  {{r.count}}</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -172,19 +172,80 @@
                                 <h6>Specification</h6>
                                 <p>{{pd.description}}</p>
                             </div>
+                      
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
                                 <h6>Reviews ( 2 )</h6>
-                                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
-                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
-                                    Neque porro lorem quisquam est, qui dolorem ipsum quia dolor si. Nemo enim ipsam
-                                    voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed quia ipsu
-                                    consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla
-                                consequat massa quis enim.</p>
-                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                                    dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
-                                    nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
-                                quis, sem.</p>
+                                {% for r in r %}
+                                <div class="d-flex">
+                                            
+                                    <img src="{% static "img/Male_Avatar.jpg" %}" class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;" alt="">
+                                    <div class="">
+                                        <p class="mb-2" style="font-size: 14px;"><span>{{ r.date }}</span></p>
+                                        <div class="d-flex justify-content-between">
+                                            <h5><span>{{r.user.username}}</span></h5>
+                                            <div class="d-flex mb-3">
+                                                <i class="fa fa-star {% if r.rating > 0 %}on{% endif %} "></i>
+                                                <i class="fa fa-star {% if r.rating > 1 %}on{% endif %} "></i>
+                                                <i class="fa fa-star {% if r.rating > 2 %}on{% endif %} "></i>
+                                                <i class="fa fa-star {% if r.rating > 3 %}on{% endif %} "></i>
+                                                <i class="fa fa-star {% if r.rating > 4 %}on{% endif %} "></i>
+                                            </div>
+                                        </div>
+                                        <p>{{r.comment}} </p>
+                                    </div>
+                                    
+                                </div>
+                                {% endfor %}
                             </div>
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name='prod_id' value= " {{ prodduct.id }} ">
+                                <h4 class="mb-5 fw-bold">Leave a Reply</h4>
+                                <div class="row g-4">
+                               
+                                   
+                                    <div class="col-lg-12">
+                                        <div class="border-bottom rounded my-4">
+                                            <textarea name="comment" id="comment" class="form-control border-0" style="width: 100%; height: 10em;" placeholder="Your Review *" spellcheck="false"></textarea>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="d-flex justify-content-between py-3 mb-5">
+                                            <div class="d-flex align-items-center">
+                                                <p class="mb-0 me-3">Please rate:</p>
+                                                
+                                                <div class='product-ratings'>
+                                                    <label for="star-1" class='label'>
+                                                    <i class='fa fa-star'></i>
+                                                    </label>
+                                                    <input type="radio" class='input' id='star-1' name='rating' value='1' >
+                                                    <label for="star-2" class='label'>
+                                                        <i class="fa fa-star"></i>
+                                                    </label>
+                                                    <input type="radio" class='input' id='star-2' name='rating' value='2' >
+                                                    <label for="star-3" class='label'>
+                                                        <i class="fa fa-star"></i>
+                                                    </label>
+                                                    <input type="radio" class='input' id='star-3' name='rating' value='3' >
+                                                    <label for="star-4" class='label'>
+                                                        <i class="fa fa-star"></i>
+                                                    </label>
+                                                    <input type="radio" class='input' id='star-4' name='rating' value='4' >
+                                                    <label for="star-5" class='label'>
+                                                        <i class="fa fa-star"></i>
+                                                    </label>
+                                                    <input type="radio" class='input' id='star-5' name='rating' value='5' checked >
+                                                </div>
+                                                
+                                            </div>
+                                           <button type="submit" class="btn border border-secondary  rounded-pill px-4 py-3 bg-danger text-white">Post Comment</button>
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -195,35 +256,62 @@
                         <h5>RELATED PRODUCTS</h5>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    {% for r in r %}
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="{{r.images1.url}}">
-                            <div class="label new">New</div>
-                            <ul class="product__hover">
-                                <li><a href="{{r.images1.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="{% url 'product_details' r.id %}"><span class="icon_bag_alt"></span></a></li>
-
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">{{r.name}}</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+                <div class="col-lg-9 col-md-9">
+                    <div class="row">
+                        {% for p in rr %}
+                        <div class="col-lg-3 col-md-6"> <!-- Adjusted column width to accommodate 4 items per row -->
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="{{p.images1.url}}">
+                                    <ul class="product__hover">
+                                        <li><a href="{{p.images1.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                        <li><a href="{% url "product_details" p.id %}"><span class="icon_bag_alt"></span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6><a href="#">{{p.name}}</a></h6>
+                                    <div class="rating">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="product__price">$ {{p.price}}</div>
+                                </div>
                             </div>
-                            <div class="product__price">$ {{r.price}}</div>
+                        </div>
+                        {% if forloop.counter|divisibleby:4 and not forloop.last %} <!-- Adjusted divisibleby to 4 -->
+                            </div><div class="row">
+                        {% endif %}
+                        {% endfor %}
+                        <div class="col-lg-12 text-center">
+                            <div class="pagination__option">
+                                {% if p.has_previous %}
+                                    <a href="?page=1"><i class="fa fa-angle-double-left"></i></a>
+                                    <a href="?page={{ p.previous_page_number }}"><i class="fa fa-angle-left"></i></a>
+                                {% endif %}
+                                {% for num in p.paginator.page_range %}
+                                    <a href="?page={{ num }}">{{ num }}</a>
+                                {% endfor %}
+                                {% if p.has_next %}
+                                    <a href="?page={{ p.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+                                    <a href="?page={{ p.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
                 
+                
+                
+                
+                
+                
+                
+                
             </div>
-        </div>
+       </div>
     </section>
     <!-- Product Details Section End -->
 

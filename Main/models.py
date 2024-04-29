@@ -104,4 +104,16 @@ class banner(models.Model):
     def __str__(self):
         return self.name
     
+class Review(models.Model):
+    product=models.ForeignKey(Product, verbose_name=('See Rating Product'), on_delete=models.CASCADE)
+    user=models.ForeignKey(User, verbose_name=('User Name'), on_delete=models.CASCADE)
+    comment=models.TextField()
+    rating=models.FloatField(default=0)
+    date=models.DateField( auto_now_add=True)
+    
+    def __str__(self):
+        return str(self.id)
+    
+    
+    
     
