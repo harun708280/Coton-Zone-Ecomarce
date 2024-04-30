@@ -290,6 +290,39 @@ def Orderplaceds(request):
         OrderPlaced(user=user,first_name=first_name,last_name=last_name,country=country, address1= address1,address2=address2, city= city,zip=zip,phone=phone,email=email,product=c.product,quantity=c.quantity).save()
         c.delete()
         
-    return redirect('home')    
+    return redirect('ord')    
     
     
+def orderss(request):
+    amount = 0.0
+    orders = OrderPlaced.objects.filter(user=request.user)
+    total_price = sum(order.quantity * order.product.price for order in orders)
+    
+    if request.method == 'POST':
+        coupon_form = CuponcodeForm(request.POST)
+        if coupon_form.is_valid():
+            code = coupon_form.cleaned_data.get('code')
+            try:
+                coupon = Cupon.objects.get(code=code)
+                if coupon.is_valid():
+                    discount_amount = (coupon.discount / 100) * total_price
+                    total_amount = total_price - discount_amount
+                    request.session['coupon_code'] = code
+                    request.session['total_discount'] = discount_amount
+                    return redirect('cart')
+                else:
+                    return redirect('checkout')
+            except Cupon.DoesNotExist:
+                return redirect('checkout')
+        
+    coupon_code = request.session.get('coupon_code')
+    total_discount = request.session.get('total_discount', 0)
+    
+    return render(request, 'order.html', {'orders': orders, 'total_discount': total_discount, 'total_price': total_price})
+
+    
+from django import template
+
+register = template.Library()
+
+

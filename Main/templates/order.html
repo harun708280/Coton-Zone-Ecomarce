@@ -1,0 +1,93 @@
+
+
+{% extends "base.html" %}
+
+
+{% load static %}
+
+{% block title %}cart{% endblock title %}
+{% block content %}
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <span>Shopping cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    
+                                    
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td class="cart__price"> {{forloop.counter }}</td>
+                                    <td class="cart__product__item">
+                                        <img class="cart__product__image" src="{{ order.product.images1.url }}" alt="" style='width: 90; height: 90;'>
+                                        <div class="cart__product__item__title">
+                                            <h6>{{ order.product.name }}</h6>
+                                            
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">$ {{ order.product.price }}</td>
+                                    <td class="cart__price">
+                                        {{ order.quantity }}
+                                    </td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+                <div class="col-lg-4 offset-lg-2">
+                    <div class="cart__total__procced">
+                        <h6>Your Total Amount</h6>
+                        <ul>
+                            {% if total_discount %}
+                            <li>Total Discount <span>${{ total_discount }}</span></li>
+                            {% else %}
+                            <li>Payment <span>${{ total_price }}</span></li>
+                            {% endif %}
+                            <li>Payment <span>${{ total_price }}</span></li>
+                            
+                            <li>Amount to Pay <span>${{ total_price|floatformat:2 }}</span></li>
+                        </ul>
+                        <a href="{% url 'home' %}" class="primary-btn">Continue Shopping</a>
+                    </div>
+                </div>
+                
+                
+            </div>
+            
+        </div>
+        
+    </section>
+    
+    <!-- Shop Cart Section End -->
+{% endblock content %}
+
+    

@@ -30,6 +30,7 @@ urlpatterns = [
     path('Accessories/',views.Accessories,name='Accessories'),
     path('Cos/',views.Cosmetics,name='Cos'),
     path('checkout/',views.checkout,name='checkout'),
-    path('order/',views.Orderplaceds,name='order')
+    path('order/',views.Orderplaceds,name='order'),
+    path('orderss/',views.orderss,name='ord'),
     
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
