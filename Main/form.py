@@ -1,7 +1,7 @@
 from django import forms
 
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,UsernameField
-from.models import Review
+from.models import Review,OrderPlaced
 from django.contrib.auth.models import User
 class RegestrationForm(UserCreationForm):
     class Meta:
@@ -19,4 +19,11 @@ class Review_From(forms.ModelForm):
     class Meta:
         model=Review
         fields=('comment','rating')
-        
+
+class CuponcodeForm(forms.Form):
+    code = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = OrderPlaced
+        fields = ('payment',)

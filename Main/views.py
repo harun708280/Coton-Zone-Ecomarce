@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 # Create your views here.
 from django import template
+from django.utils import timezone
 
 register = template.Library()
 
@@ -87,18 +88,43 @@ def cart(request):
 
 def show_cart(request):
     if request.user.is_authenticated:
-        user=request.user
-        cart=Cart.objects.filter(user=user)
-        amount=0.0
-        cart_product=[p for p in Cart.objects.all() if p.user==user]
-        if cart_product:
-            for p in cart_product:
-                tamount=(p.quantity*p.product.price)
-                amount=amount+tamount
-                vat=amount+10
-            return render(request,'shop-cart.html',{'totalamount':amount,'cart':cart,'line_total':Cart.line_total,'vat':vat})
-        else:
-            return redirect('eror')       
+        user = request.user
+        cart = Cart.objects.filter(user=user)
+        amount = 0.0
+        vat = 0.0
+        
+        cart_products = Cart.objects.filter(user=user)
+        if cart_products:
+            for cart_item in cart_products:
+                tamount = cart_item.quantity * cart_item.product.price
+                amount += tamount
+                vat = amount + 10
+
+            if request.method == 'POST':
+                cuponform = CuponcodeForm(request.POST)
+                if cuponform.is_valid():
+                    current_time = timezone.now()
+                    code = cuponform.cleaned_data.get('code')
+                    
+                    current_coupon = Cupon.objects.get(code=code)
+                    if current_coupon.valid_to >= current_time.date() and current_coupon.active:
+                            discount_price = (current_coupon.discaunt / 100) * amount
+                            coupon_discount = amount - discount_price
+                            request.session['total_discount'] = coupon_discount 
+                            request.session['coupon_code'] = code
+                            print(coupon_discount)
+                            return redirect('cart')
+                        
+                    else:
+                        return redirect('home')
+                   
+            coupon_discount = request.session.get('total_discount')
+            coupon_code = request.session.get('coupon_code')
+            return render(request, 'shop-cart.html', {'totalamount': amount, 'cart': cart, 'line_total': Cart.line_total, 'vat': vat, 'coupon_discount': coupon_discount, 'code': coupon_code})
+        
+        
+    
+    return render(request,'carteroro.html')      
 def delete_cart(request,id):
     cart=Cart.objects.get(id=id)
     cart.delete()
@@ -210,3 +236,60 @@ def Cosmetics(request):
     pc=Cetagory.objects.get(name='Cosmetics')
     p=Product.objects.filter(cetagory=pc)
     return render(request,'Cosmetics.html',locals())
+
+def checkout(request):
+    if request.user.is_authenticated:
+        user = request.user
+        cart_items = Cart.objects.filter(user=user)
+        amount = sum(cart_item.quantity * cart_item.product.price for cart_item in cart_items)
+
+        if request.method == 'POST':
+            coupon_form = CuponcodeForm(request.POST)
+            if coupon_form.is_valid():
+                code = coupon_form.cleaned_data.get('code')
+                try:
+                    coupon = Cupon.objects.get(code=code)
+                    if coupon.is_valid():
+                        discount_amount = (coupon.discount / 100) * amount
+                        total_amount = amount - discount_amount
+                        request.session['coupon_code'] = code
+                        request.session['total_discount'] = discount_amount
+                        return redirect('cart')
+                    else:
+                        
+                        return redirect('checkout')
+                except Cupon.DoesNotExist:
+                   
+                    return redirect('checkout')
+
+        coupon_code = request.session.get('coupon_code')
+        total_discount = request.session.get('total_discount', 0)
+        return render(request, 'checkout.html', {'cart': cart_items, 'totalamount': amount, 'coupon_code': coupon_code, 'total_discount': total_discount})
+
+    return render(request, 'login.html')
+   
+def Orderplaceds(request):
+    
+    if request.method == 'POST':
+        first_name= request.POST.get('first_name')
+        last_name= request.POST.get('last_name')
+        country=request.POST.get('country')
+        address1=request.POST.get('address1')
+        address2=request.POST.get('address2')
+        city=request.POST.get('city')
+        zip=request.POST.get('zip')
+        phone=request.POST.get('phone')
+        email=request.POST.get('email')
+        #payment=request.POST.get('payment')
+        
+    
+    
+    user=request.user
+    cart=Cart.objects.filter(user=user)
+    for c in cart :
+        OrderPlaced(user=user,first_name=first_name,last_name=last_name,country=country, address1= address1,address2=address2, city= city,zip=zip,phone=phone,email=email,product=c.product,quantity=c.quantity).save()
+        c.delete()
+        
+    return redirect('home')    
+    
+    
