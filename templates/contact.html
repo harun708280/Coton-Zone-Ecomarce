@@ -21,6 +21,19 @@
         </div>
     </div>
     <!-- Breadcrumb End -->
+    {% if messages %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Contact Section Begin -->
     <section class="contact spad">
@@ -48,12 +61,13 @@
                         <div class="contact__form">
                             <h5>SEND MESSAGE</h5>
                             <form action="" method='POST'>
-                                <input type="text" name='name' placeholder="Name">
-                                <input type="email" name='email' placeholder="Email">
-                                
-                                <textarea placeholder="Message"></textarea>
-                                <button type="submit" name='comment' class="site-btn">Send Message</button>
+                                {% csrf_token %}
+                                <input type="text"  placeholder="Name" name='name'>
+                                <input type="email"  placeholder="Email" name='email'>
+                                <textarea placeholder="Message" name='comment'></textarea>
+                                <button type="submit"  class="site-btn">Send Message</button>
                             </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -69,5 +83,6 @@
     </div>
 </section>
 <!-- Contact Section End -->
+
 
 {% endblock content%}

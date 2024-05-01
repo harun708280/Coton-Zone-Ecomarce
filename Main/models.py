@@ -197,5 +197,26 @@ class OrderPlaced(models.Model):
         return True
             '''
     
+class Contract(models.Model):
+    user=models.ForeignKey(User,  on_delete=models.CASCADE)
+    names=models.CharField( max_length=50,blank=True,null=True)
+    email=models.EmailField( max_length=254)
+    comment=models.TextField()
+    
+    
+    def __str__(self):
+        return f'{self.user.username}'
+    
+    class Meta:
+        verbose_name='Contract sm'
+    
+class SMS(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    mnb = models.CharField(max_length=50, null=True, blank=True)
 
+    mkl=models.EmailField( max_length=254,null=True, blank=True)
+    cmm=models.TextField(null=True, blank=True)
+    
+    def __str__(self):
+        return f'{self.user.username}'
     

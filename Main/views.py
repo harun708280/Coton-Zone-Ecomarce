@@ -10,6 +10,8 @@ from django.core.paginator import Paginator
 # Create your views here.
 from django import template
 from django.utils import timezone
+from django.contrib import messages
+from django.core.mail import send_mail
 
 register = template.Library()
 
@@ -153,7 +155,29 @@ def blog(request):
     return render(request,'blog.html')
 
 def contract(request):
-    return render(request,'contact.html')
+    if request.user.is_authenticated:
+        names = request.POST.get('names')  # corrected field name
+        email = request.POST.get('email')
+        comment = request.POST.get('comment')
+        user = request.user
+        data={
+            'name':names,
+            'email':email,
+            'message':comment
+        }
+        email_message = '''
+        From : {}
+        Name : {}
+        Comment : {}
+        '''.format(data['email'],data['name'],data['message'])
+        send_mail('New Message Revidve CottonZon Contract',email_message,'',['harun708280@gmail.com'])
+        en = SMS(user=user, mnb=names, mkl=email, cmm=comment)
+        en.save()
+        messages.success(request, 'SMS Send Done')
+        return render(request, 'contact.html')
+    else:
+        return redirect('login')
+
 
 def login(request):
     return render(request,'login.html')
