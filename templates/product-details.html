@@ -88,6 +88,15 @@
                                     <span class="icon_bag_alt"></span> Add to Cart
                                 </button>
                             </form>
+                            
+                            <form action="/wc">
+                                <input type="hidden" name="prod_id" value="{{ pd.id }}" id="prod_id"> 
+                                <input type="hidden" name="product_quantity" id="product_quantity" value="1"> 
+                                <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 mb-4 text-white">
+
+                                    <span class="icon_heart_alt"> </span> Add WishCart 
+                                </button>
+                            </form>
                         </div>
                         
                         

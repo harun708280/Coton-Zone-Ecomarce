@@ -13,8 +13,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                        <span>Shopping cart</span>
+                        <a href="{% url "home" %}"><i class="fa fa-home"></i> Home</a>
+                        <span>Wish Cart cart</span>
                     </div>
                 </div>
             </div>
@@ -34,14 +34,14 @@
                                     <th>Id</th>
                                     <th>Product</th>
                                     <th>Price</th>
-                                    <th>Quantity</th>
+                                    
                                     
                                     
                                     
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for order in orders %}
+                                {% for order in w %}
                                 <tr>
                                     <td class="cart__price"> {{forloop.counter }}</td>
                                     <td class="cart__product__item">
@@ -56,8 +56,16 @@
                                         {{ order.quantity }}
                                     </td>
                                     <td class="cart__price">
-                                        <a href="{% url "delete_order" order.id %}" class=' text-danger'>Order Cancel</span>
-                                        </a>
+                                        
+                                        <a href="{% url "wish_dele" order.id %}" class=' text-danger'>
+                                            <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 mb-4 text-white" style="width: 215px; height: 40px;">
+                                                <span class="icon_heart_alt"></span> Remove WishCart
+                                            </button>
+                                       </a>
+                                       
+                                       
+                                    
+                                        
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -67,22 +75,7 @@
                     </div>
                     
                 </div>
-                <div class="col-lg-4 offset-lg-2">
-                    <div class="cart__total__procced">
-                        <h6>Your Total Amount</h6>
-                        <ul>
-                            {% if total_discount %}
-                            <li>Total Discount <span>${{ total_discount }}</span></li>
-                            {% else %}
-                            <li>Payment <span>${{ total_price }}</span></li>
-                            {% endif %}
-                            <li>Payment <span>${{ total_price }}</span></li>
-                            
-                            <li>Amount to Pay <span>${{ total_price|floatformat:2 }}</span></li>
-                        </ul>
-                        <a href="{% url 'home' %}" class="primary-btn">Continue Shopping</a>
-                    </div>
-                </div>
+                
                 
                 
             </div>

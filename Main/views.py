@@ -12,6 +12,8 @@ from django import template
 from django.utils import timezone
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.http import HttpResponseBadRequest
+
 
 register = template.Library()
 
@@ -20,6 +22,11 @@ def get_range(value):
     return range(value)
 
 def home(request):
+    total_cart=0
+    total_wish=0
+    if request.user.is_authenticated:
+        total_cart=len(Cart.objects.filter(user=request.user))
+        total_wish=len(Wishlist.objects.filter(user=request.user))
     pro=Product.objects.all()[:8]
     pt=Cetagory.objects.all()
     bs=Best_sels.objects.all()[:4]
@@ -35,7 +42,7 @@ def home(request):
     
     
     
-    return render(request,'index.html',{'p':pro,'pt':pt,'bs':bs,'ht':ht,'f':f,'pf':pf,'m':ma,'a':acc,'w':w,'k':kids,'c':cos})
+    return render(request,'index.html',{'p':pro,'pt':pt,'bs':bs,'ht':ht,'f':f,'pf':pf,'m':ma,'a':acc,'w':w,'k':kids,'c':cos,'total_cart':total_cart,'total_wish':total_wish})
 class ProductdetailsView(View):
     def get(self,request,pk):
         if request.user.is_authenticated:
@@ -73,19 +80,27 @@ class ProductdetailsView(View):
 def cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
-    product_quantity = int(request.GET.get('product_quantity', 1))  # Default quantity to 1 if not provided
-    product = Product.objects.get(id=product_id)
+    
+    # Check if the product_id is provided and not empty
+    if not product_id:
+        return HttpResponseBadRequest("Product ID is required.")
     
     try:
-        cart_item = Cart.objects.get(user=user, product=product)
-        cart_item.quantity = product_quantity
-        cart_item.save()
-    except Cart.DoesNotExist:
-        # Create a new cart item if it doesn't exist
-        cart_item = Cart(user=user, product=product, quantity=product_quantity)
-        cart_item.save()
+        product = Product.objects.get(id=product_id)
+        product_quantity = int(request.GET.get('product_quantity', 1))  # Default quantity to 1 if not provided
+        
+        try:
+            cart_item = Cart.objects.get(user=user, product=product)
+            cart_item.quantity = product_quantity
+            cart_item.save()
+        except Cart.DoesNotExist:
+            # Create a new cart item if it doesn't exist
+            cart_item = Cart(user=user, product=product, quantity=product_quantity)
+            cart_item.save()
 
-    return redirect('/cart')
+        return redirect('/cart')
+    except Product.DoesNotExist:
+        return HttpResponseBadRequest("Invalid product ID.")
 
 
 def show_cart(request):
@@ -131,7 +146,10 @@ def delete_cart(request,id):
     cart=Cart.objects.get(id=id)
     cart.delete()
     return redirect('/cart')
-            
+def Delete(request,id):
+    order=OrderPlaced.objects.get(id=id)
+    order.delete() 
+    return redirect('ord')        
 def shop(request):
     p = Product.objects.all()
     paginator = Paginator(p, 9)
@@ -349,4 +367,44 @@ from django import template
 
 register = template.Library()
 
+def Show_wishlist(request):
+    wishlists=Wishlist.objects.filter(user=request.user)
+    if wishlists:
+     return render(request,'wishlist.html',{'w':wishlists})
+    
+    else:
+        return render(request,'carteroro.html')
+ 
+ 
+ 
+ 
+ 
 
+def wishlist(request,):
+    if request.user.is_authenticated:
+        user=request.user
+        product_id=request.GET.get('prod_id')
+        product=Product.objects.get(id=product_id)
+        if product:
+            try:
+                wish_item=Wishlist.objects.get(user=user,product=product)
+                
+                wish_item.save()
+            
+            except Wishlist.DoesNotExist:
+                wish_item=Wishlist(user=user,product=product)
+                wish_item.save()
+            return redirect('home')
+        
+        else:
+    
+         return render(request,'carteroro.html')
+
+def wishs_Delate(request,id):
+    wish=Wishlist.objects.get(id=id)
+    wish.delete()
+    return redirect('wishlist')
+    
+    
+
+    

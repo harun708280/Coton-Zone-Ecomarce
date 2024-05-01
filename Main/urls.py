@@ -14,6 +14,7 @@ urlpatterns = [
     path('cart/',views.show_cart,name='cart'),
     path('add-to-cart',views.cart,name='add-to-cart'),
     path('delete-cart/<int:id>',views.delete_cart,name='delete_cart'),
+    path('delete_order/<int:id>',views.Delete,name='delete_order'),
     path('contract/',views.contract,name='contract'),
     path('registration/',views.registration,name='registration'),
     path('login/',auth_view.LoginView.as_view(template_name='login.html',authentication_form=LoginForm),name='login'),
@@ -32,5 +33,8 @@ urlpatterns = [
     path('checkout/',views.checkout,name='checkout'),
     path('order/',views.Orderplaceds,name='order'),
     path('orderss/',views.orderss,name='ord'),
+    path('wishlist/',views.Show_wishlist,name='wishlist'),
+    path('wc/',views.wishlist,name='wc'),
+    path('wish_del/<int:id>',views.wishs_Delate,name='wish_dele')
     
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
