@@ -13,3 +13,5 @@ admin.site.register(Cupon)
 admin.site.register(OrderPlaced)
 admin.site.register(SMS)
 admin.site.register(Wishlist)
+
+admin.site.register(Subscribe)

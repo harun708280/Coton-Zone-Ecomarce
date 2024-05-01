@@ -27,3 +27,6 @@ class PaymentForm(forms.ModelForm):
     class Meta:
         model = OrderPlaced
         fields = ('payment',)
+
+class SubscribeForm(forms.Form):
+    subscribe = forms.CharField()

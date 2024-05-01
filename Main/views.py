@@ -17,16 +17,16 @@ from django.http import HttpResponseBadRequest
 
 register = template.Library()
 
-@register.filter
-def get_range(value):
-    return range(value)
 
 def home(request):
     total_cart=0
     total_wish=0
     if request.user.is_authenticated:
+        #subscribe=request.POST.get('subscribe')
         total_cart=len(Cart.objects.filter(user=request.user))
         total_wish=len(Wishlist.objects.filter(user=request.user))
+    
+    user=request.user
     pro=Product.objects.all()[:8]
     pt=Cetagory.objects.all()
     bs=Best_sels.objects.all()[:4]
@@ -39,13 +39,20 @@ def home(request):
     w=banner.objects.filter(name='Women’s Fashion')
     kids=banner.objects.filter(name='Kid’s Fashion')
     cos=banner.objects.filter(name='Cosmetics')
+    #sub=Subscribe(user=user,email=subscribe)
     
+    #sub.save()
+    #messages.success(request,'Congratulation SuccesFully Your Subcribtion')
     
     
     return render(request,'index.html',{'p':pro,'pt':pt,'bs':bs,'ht':ht,'f':f,'pf':pf,'m':ma,'a':acc,'w':w,'k':kids,'c':cos,'total_cart':total_cart,'total_wish':total_wish})
 class ProductdetailsView(View):
     def get(self,request,pk):
+        total_cart=0
+        total_wish=0
         if request.user.is_authenticated:
+            total_cart=len(Cart.objects.filter(user=request.user))
+            total_wish=len(Wishlist.objects.filter(user=request.user))
             pd=Product.objects.get(pk=pk)
             reviews=Review.objects.filter(product=pd)
             comment_form=Review_From()
@@ -58,7 +65,7 @@ class ProductdetailsView(View):
             
             except Cart.DoesNotExist:
                 quantity=1
-            return render(request,'product-details.html',{'pd':pd,'rr':related_product,'quantity':quantity,'r':reviews,'cf':comment_form})
+            return render(request,'product-details.html',{'pd':pd,'rr':related_product,'quantity':quantity,'r':reviews,'cf':comment_form,'total_cart':total_cart,'total_wish':total_wish})
         
         else:
             return redirect('login')
@@ -78,6 +85,7 @@ class ProductdetailsView(View):
             return redirect('home')
 
 def cart(request):
+    
     user = request.user
     product_id = request.GET.get('prod_id')
     
@@ -104,7 +112,13 @@ def cart(request):
 
 
 def show_cart(request):
+    total_cart=0
+    total_wish=0
+    
     if request.user.is_authenticated:
+        total_cart=len(Cart.objects.filter(user=request.user))
+        
+        total_wish=len(Wishlist.objects.filter(user=request.user))
         user = request.user
         cart = Cart.objects.filter(user=user)
         amount = 0.0
@@ -137,7 +151,7 @@ def show_cart(request):
                    
             coupon_discount = request.session.get('total_discount')
             coupon_code = request.session.get('coupon_code')
-            return render(request, 'shop-cart.html', {'totalamount': amount, 'cart': cart, 'line_total': Cart.line_total, 'vat': vat, 'coupon_discount': coupon_discount, 'code': coupon_code})
+            return render(request, 'shop-cart.html', {'totalamount': amount, 'cart': cart, 'line_total': Cart.line_total, 'vat': vat, 'coupon_discount': coupon_discount, 'code': coupon_code,'total_cart':total_cart,'total_wish':total_wish})
         
         
     
@@ -151,6 +165,12 @@ def Delete(request,id):
     order.delete() 
     return redirect('ord')        
 def shop(request):
+    total_cart=0 
+    total_wish=0
+    if request.user.is_authenticated:
+        
+        total_cart=len(Cart.objects.filter(user=request.user))
+        total_wish=len(Wishlist.objects.filter(user=request.user))
     p = Product.objects.all()
     paginator = Paginator(p, 9)
     page_number = request.GET.get('page')
@@ -158,7 +178,7 @@ def shop(request):
     print("Page Number:", page_number) 
     
     datafinal = paginator.get_page(page_number)
-    return render(request, 'shop.html', {'p':datafinal})
+    return render(request, 'shop.html', {'p':datafinal,'total_cart':total_cart,'total_wish':total_wish})
 
 
 
@@ -406,5 +426,22 @@ def wishs_Delate(request,id):
     return redirect('wishlist')
     
     
-
+def Search(request):
+    if request.method == 'GET':
+        search=request.GET.get('search')
+        if search:
+            product=Product.objects.filter(name__icontains=search)
+            return render(request,'search.html',{"product":product})
+        
+        else:
+            return render(request,'search.html')
+   
+def subscribes(request):
+    if request.user.is_authenticated:
+        subscribe=request.POST.get('subscribe')
+    user=request.user
     
+    subs=Subscribe(user=user,email=subscribe)
+    subs.save()
+    messages.success(request,'Congratulation For Your Subscriotion')
+    return redirect('home')

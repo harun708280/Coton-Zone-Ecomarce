@@ -66,30 +66,30 @@
     <!-- Header Section Begin -->
     <header class="header">
         <div class="container-fluid">
-            
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <a href="{% url "home" %}"><img src="{% static "img/Black-extra-size.png" %}" alt="" style="width: 100px; height: auto;"></a>
+                        <a href="{% url "home" %}">
+                            <img src="{% static "img/Black-extra-size.png" %}" alt="" style="width: 100px; height: auto;">
+                        </a>
                     </div>
                 </div>
-                
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
                         <ul>
-                           
                             <li class=""><a href="{% url "home" %}">Home</a></li>
                             <li><a href="{% url "women" %}">Women’s</a></li>
                             <li><a href="{% url "man" %}">Men’s</a></li>
                             <li><a href="{% url "shop" %}">Shop</a></li>
-                            <li><a href="#"><span>{{request.user.username|capfirst}}</span></a>
+                            <li>
+                                <a href="#">
+                                    <span>{{request.user.username|capfirst}}</span>
+                                </a>
                                 <ul class="dropdown">
                                     <li><a href="{% url "cart" %}">Shop Cart</a></li>
                                     <li><a href="{% url "checkout" %}">Checkout</a></li>
                                     <li><a href="{% url "blog-details" %}">Blog Details</a></li>
                                     <li><a href="{% url "ord" %}">Order Details</a></li>
-                                    
-                                    
                                 </ul>
                             </li>
                             <li><a href="{% url "blog" %}">Blog</a></li>
@@ -98,25 +98,28 @@
                     </nav>
                 </div>
                 <div class="col-lg-3">
-                    
                     <div class="header__right">
-                        
                         <ul class="header__right__widget">
-                            <li><span class="icon_search search-switch"></span></li>
+                            <li>
+                                <form action="{% url "search" %}" method="get">
+                                    <div class="input-group rounded">
+                                        <input type="search" name='search' class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon">
+                                        <button type="submit" class=" rounded"><span class="input-group-text border-0" id="search-addon">
+                                            <i class="fas fa-search"></i>
+                                        </span></button>
+                                    </div>
+                                </form>
+                            </li>
                             <li><a href="{% url "wishlist" %}"><span class="icon_heart_alt"></span><div class="tip">{{total_wish}}</div></a></li>
                             <li><a href="{% url "cart" %}"><span class="icon_bag_alt"></span><div class="tip">{{total_cart}}</div></a></li>
                         </ul>
-                       
                         <div class="header__right__auth ml-3 ">
                             {% if request.user.is_authenticated %}
                             <form action="{% url "logout" %}" method="post">
-                                                        
-                            {% csrf_token %}
-                            <button type="submit" class='border border-0 bg-white'>Logout</button> 
+                                {% csrf_token %}
+                                <button type="submit" class='border border-0 bg-white'>Logout</button> 
                             </form>
-
                             {% else %}
-            
                             <a href="{% url "login" %}">Login</a>
                             <a href="{% url "registration" %}">Register</a>
                             {% endif %}
@@ -124,12 +127,11 @@
                     </div>
                 </div>
             </div>
-            
             <div class="canvas__open">
                 <i class="fa fa-bars"></i>
             </div>
-           
         </div>
+        
     </header>
     <!-- Header Section End -->
 
@@ -139,6 +141,19 @@
  {% endblock content %}
 
  <!-- Footer Section Begin -->
+ {% if messages %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12" style="body-color: red;">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 <footer class="footer">
     <div class="container">
         <div class="row">
@@ -183,8 +198,10 @@
             <div class="col-lg-4 col-md-8 col-sm-8">
                 <div class="footer__newslatter">
                     <h6>NEWSLETTER</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Email">
+                    <form action="{% url "sb" %}" method='POST'>
+                        
+                        {% csrf_token %}
+                        <input type="email" name='subscribe' placeholder="Email">
                         <button type="submit" class="site-btn">Subscribe</button>
                     </form>
                     <div class="footer__social">

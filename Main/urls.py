@@ -35,6 +35,8 @@ urlpatterns = [
     path('orderss/',views.orderss,name='ord'),
     path('wishlist/',views.Show_wishlist,name='wishlist'),
     path('wc/',views.wishlist,name='wc'),
-    path('wish_del/<int:id>',views.wishs_Delate,name='wish_dele')
+    path('wish_del/<int:id>',views.wishs_Delate,name='wish_dele'),
+    path('search/',views.Search,name='search'),
+    path('subscribe/',views.subscribes,name='sb')
     
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

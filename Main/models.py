@@ -227,4 +227,13 @@ class Wishlist(models.Model):
     
     def __str__(self):
         return f'{self.user.username}'
+
+
+class Subscribe(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    email=models.EmailField(max_length=254,blank=True,null=True)
+    date=models.DateField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.user.username}'
     
