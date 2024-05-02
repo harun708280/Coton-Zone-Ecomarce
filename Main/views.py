@@ -269,10 +269,12 @@ def minas_cart(request):
 
 def man(request):
     ct=Cetagory.objects.get(name='Man')
-    
     p = Product.objects.filter(cetagory=ct)  
     pa=Product.objects.filter(name='T-Shirt')
-    return render(request, 'man.html', {'p': p,'pa':pa})
+    paginator = Paginator(p, 3)
+    page_number = request.GET.get('page')
+    datafinal = paginator.get_page(page_number)
+    return render(request, 'man.html', {'p': p,'pa':pa,'p':datafinal})
 
 
 def women(request):
