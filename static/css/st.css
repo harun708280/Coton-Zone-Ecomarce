@@ -8,3 +8,13 @@
     height: 150px;
 }
 
+.header__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__right__auth {
+    display: flex;
+    align-items: center;
+}

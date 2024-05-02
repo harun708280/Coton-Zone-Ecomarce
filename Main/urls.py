@@ -17,7 +17,7 @@ urlpatterns = [
     path('delete_order/<int:id>',views.Delete,name='delete_order'),
     path('contract/',views.contract,name='contract'),
     path('registration/',views.registration,name='registration'),
-    path('login/',auth_view.LoginView.as_view(template_name='login.html',authentication_form=LoginForm),name='login'),
+    path('accounts/login/',auth_view.LoginView.as_view(template_name='login.html',authentication_form=LoginForm),name='login'),
     path('logout/',auth_view.LogoutView.as_view(next_page='login'),name='logout'),
     path('plus_cart',views.plus_cart,name="plus_cart"),
     path('minas_cart',views.minas_cart,name="minas_cart"),

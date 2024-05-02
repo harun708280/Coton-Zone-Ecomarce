@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
-                        <ul>
+                        <ul class="inline-list">
                             <li class=""><a href="{% url "home" %}">Home</a></li>
                             <li><a href="{% url "women" %}">Women’s</a></li>
                             <li><a href="{% url "man" %}">Men’s</a></li>
@@ -85,7 +85,7 @@
                                 <a href="#">
                                     <span>{{request.user.username|capfirst}}</span>
                                 </a>
-                                <ul class="dropdown">
+                                <ul class="dropdown inline-list">
                                     <li><a href="{% url "cart" %}">Shop Cart</a></li>
                                     <li><a href="{% url "checkout" %}">Checkout</a></li>
                                     <li><a href="{% url "blog-details" %}">Blog Details</a></li>
@@ -99,38 +99,49 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="header__right">
-                        <ul class="header__right__widget">
+                        <ul class="header__right__widget inline-list">
                             <li>
                                 <form action="{% url "search" %}" method="get">
                                     <div class="input-group rounded">
-                                        <input type="search" name='search' class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon">
-                                        <button type="submit" class=" rounded"><span class="input-group-text border-0" id="search-addon">
+                                        <input type="search" name='search' class="form-control rounded" style="padding: 4px 8px;" placeholder="Search" aria-label="Search" aria-describedby="search-addon">
+                                        <button type="submit" class="rounded"><span class="input-group-text border-0" id="search-addon">
                                             <i class="fas fa-search"></i>
                                         </span></button>
                                     </div>
                                 </form>
                             </li>
-                            <li><a href="{% url "wishlist" %}"><span class="icon_heart_alt"></span><div class="tip">{{total_wish}}</div></a></li>
-                            <li><a href="{% url "cart" %}"><span class="icon_bag_alt"></span><div class="tip">{{total_cart}}</div></a></li>
+                            <li>
+                                <a href="{% url "wishlist" %}">
+                                    <span class="icon_heart_alt"></span>
+                                    <div class="tip">{{total_wish}}</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url "cart" %}">
+                                    <span class="icon_bag_alt"></span>
+                                    <div class="tip">{{total_cart}}</div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="header__right__auth ml-3 d-inline">
+                                    {% if request.user.is_authenticated %}
+                                    <form action="{% url "logout" %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class='border border-0 bg-white'>Logout</button> 
+                                    </form>
+                                    {% else %}
+                                    <a href="{% url "login" %}">Login</a>
+                                    <a href="{% url "registration" %}">Register</a>
+                                    {% endif %}
+                                </div>
+                            </li>
                         </ul>
-                        <div class="header__right__auth ml-3 ">
-                            {% if request.user.is_authenticated %}
-                            <form action="{% url "logout" %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class='border border-0 bg-white'>Logout</button> 
-                            </form>
-                            {% else %}
-                            <a href="{% url "login" %}">Login</a>
-                            <a href="{% url "registration" %}">Register</a>
-                            {% endif %}
-                        </div>
                     </div>
                 </div>
             </div>
-            <div class="canvas__open">
-                <i class="fa fa-bars"></i>
-            </div>
         </div>
+        
+        
         
     </header>
     <!-- Header Section End -->

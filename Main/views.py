@@ -4,7 +4,7 @@ from .form import *
 from django.contrib import messages
 from.models import *
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q ,Min,Max
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 # Create your views here.
@@ -13,6 +13,8 @@ from django.utils import timezone
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpResponseBadRequest
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
 register = template.Library()
@@ -39,6 +41,7 @@ def home(request):
     w=banner.objects.filter(name='Women’s Fashion')
     kids=banner.objects.filter(name='Kid’s Fashion')
     cos=banner.objects.filter(name='Cosmetics')
+    
     #sub=Subscribe(user=user,email=subscribe)
     
     #sub.save()
@@ -46,6 +49,7 @@ def home(request):
     
     
     return render(request,'index.html',{'p':pro,'pt':pt,'bs':bs,'ht':ht,'f':f,'pf':pf,'m':ma,'a':acc,'w':w,'k':kids,'c':cos,'total_cart':total_cart,'total_wish':total_wish})
+@method_decorator(login_required,name='dispatch')
 class ProductdetailsView(View):
     def get(self,request,pk):
         total_cart=0
@@ -83,7 +87,7 @@ class ProductdetailsView(View):
         
         else:
             return redirect('home')
-
+@login_required
 def cart(request):
     
     user = request.user
@@ -110,7 +114,7 @@ def cart(request):
     except Product.DoesNotExist:
         return HttpResponseBadRequest("Invalid product ID.")
 
-
+@login_required
 def show_cart(request):
     total_cart=0
     total_wish=0
@@ -165,6 +169,7 @@ def Delete(request,id):
     order.delete() 
     return redirect('ord')        
 def shop(request):
+    
     total_cart=0 
     total_wish=0
     if request.user.is_authenticated:
@@ -172,7 +177,7 @@ def shop(request):
         total_cart=len(Cart.objects.filter(user=request.user))
         total_wish=len(Wishlist.objects.filter(user=request.user))
     p = Product.objects.all()
-    paginator = Paginator(p, 9)
+    paginator = Paginator(p, 6)
     page_number = request.GET.get('page')
     
     print("Page Number:", page_number) 
@@ -182,7 +187,7 @@ def shop(request):
 
 
 
-
+@login_required
 def checkout(request):
     return render(request,'checkout.html')
 
@@ -193,29 +198,28 @@ def blog(request):
     return render(request,'blog.html')
 
 def contract(request):
-    if request.user.is_authenticated:
-        names = request.POST.get('names')  # corrected field name
+    if request.method == 'POST':
+        names = request.POST.get('name')  
         email = request.POST.get('email')
         comment = request.POST.get('comment')
         user = request.user
         data={
-            'name':names,
-            'email':email,
-            'message':comment
+            'names': names,
+            'email': email,
+            'message': comment
         }
         email_message = '''
-        From : {}
-        Name : {}
-        Comment : {}
-        '''.format(data['email'],data['name'],data['message'])
-        send_mail('New Message Revidve CottonZon Contract',email_message,'',['harun708280@gmail.com'])
+        From: {}
+        Name: {}
+        Comment: {}
+        '''.format(data['email'], data['names'], data['message'])
+        send_mail('New Message Received By CottonZon Contract', email_message, '', ['harun708280@gmail.com'])
         en = SMS(user=user, mnb=names, mkl=email, cmm=comment)
         en.save()
-        messages.success(request, 'SMS Send Done')
-        return render(request, 'contact.html')
-    else:
-        return redirect('login')
+        messages.success(request, 'SMS Sent Successfully')
+    return render(request, 'contact.html')
 
+    
 
 def login(request):
     return render(request,'login.html')
@@ -298,7 +302,7 @@ def Cosmetics(request):
     pc=Cetagory.objects.get(name='Cosmetics')
     p=Product.objects.filter(cetagory=pc)
     return render(request,'Cosmetics.html',locals())
-
+@login_required
 def checkout(request):
     if request.user.is_authenticated:
         user = request.user
@@ -386,7 +390,7 @@ def orderss(request):
 from django import template
 
 register = template.Library()
-
+@login_required
 def Show_wishlist(request):
     wishlists=Wishlist.objects.filter(user=request.user)
     if wishlists:
@@ -399,7 +403,7 @@ def Show_wishlist(request):
  
  
  
-
+@login_required
 def wishlist(request,):
     if request.user.is_authenticated:
         user=request.user
@@ -435,7 +439,7 @@ def Search(request):
         
         else:
             return render(request,'search.html')
-   
+@login_required        
 def subscribes(request):
     if request.user.is_authenticated:
         subscribe=request.POST.get('subscribe')
