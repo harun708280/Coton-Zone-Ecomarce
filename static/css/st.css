@@ -18,3 +18,11 @@
     display: flex;
     align-items: center;
 }
+
+.blog__item__pic.large__item {
+    width: 360px; /* Set the desired width */
+    height: 240px; /* Set the desired height */
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the background image */
+
+}

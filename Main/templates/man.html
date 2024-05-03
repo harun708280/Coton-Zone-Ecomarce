@@ -80,8 +80,8 @@
                                 
                                 <div class="product__item__pic set-bg" data-setbg="{{p.images1.url}}">
                                     <ul class="product__hover">
-                                        <li><a href="img/shop/shop-2.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                        <li><a href="{{p.iamges2.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                        <li><a href="{% url "product_details" p.id %}"><span class="icon_heart_alt"></span></a></li>
                                         <li><a href="{% url "product_details" p.id%}"><span class="icon_bag_alt"></span></a></li>
                                     </ul>
                                 </div>

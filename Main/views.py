@@ -191,11 +191,20 @@ def shop(request):
 def checkout(request):
     return render(request,'checkout.html')
 
-def blog_details(request):
-    return render(request,'blog-details.html')
+def blog_details(request, pk):
+    blog = Blog.objects.get(pk=pk)
+    
+    return render(request, 'blog-details.html', {'bd': blog})
+
+
 
 def blog(request):
-    return render(request,'blog.html')
+    blogs = Blog.objects.all()
+    paginator = Paginator(blogs, 3)
+    page_number = request.GET.get('page')
+    datafinal = paginator.get_page(page_number)
+    return render(request, 'blog.html', {'blogs': datafinal})  # Pass 'datafinal' instead of 'blogs'
+
 
 def contract(request):
     if request.method == 'POST':
@@ -280,8 +289,10 @@ def man(request):
 def women(request):
     ct=Cetagory.objects.get(name='Women')
     p=Product.objects.filter(cetagory=ct)
-    return render(request,'women.html',{'p':p})
-
+    paginator = Paginator(p, 3)
+    page_number = request.GET.get('page')
+    datafinal = paginator.get_page(page_number)
+    return render(request, 'women.html', {'p': datafinal})
 def carterror(request):
     return render(request,'carteroro.html')
 
@@ -451,3 +462,4 @@ def subscribes(request):
     subs.save()
     messages.success(request,'Congratulation For Your Subscriotion')
     return redirect('home')
+

@@ -15,3 +15,5 @@ admin.site.register(SMS)
 admin.site.register(Wishlist)
 
 admin.site.register(Subscribe)
+admin.site.register(Blog)
+admin.site.register(Blog_comment)

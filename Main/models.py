@@ -236,4 +236,26 @@ class Subscribe(models.Model):
     
     def __str__(self):
         return f'{self.user.username}'
+
+class Blog(models.Model):
+    cetagory=models.ForeignKey(Cetagory, on_delete=models.CASCADE,blank=True,null=True)
+    description=models.TextField()
+    info=models.TextField(verbose_name='Long Information',blank=True,null=False)
+    add=models.CharField(verbose_name='Add By Blog ', max_length=50)
+    img=models.ImageField(upload_to='Blog',)
+    date=models.DateField( auto_now_add=False)
+    def __str__(self):
+        return f'{self.cetagory}'
     
+    class Meta:
+        verbose_name='Add To Blog Page'
+    
+class Blog_comment(models.Model):
+    blog=models.ForeignKey(Blog ,verbose_name='Blog Name', on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    comment=models.TextField()
+    date=models.DateField( auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.user.username}'
+

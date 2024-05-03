@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{% static "css/style.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "css/st.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "css/rt.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "css/blog.css" %}" type="text/css">
 </head>
 
 <body>
@@ -88,7 +89,7 @@
                                 <ul class="dropdown inline-list">
                                     <li><a href="{% url "cart" %}">Shop Cart</a></li>
                                     <li><a href="{% url "checkout" %}">Checkout</a></li>
-                                    <li><a href="{% url "blog-details" %}">Blog Details</a></li>
+                                    {% comment "" %}<li><a href="{% url "blog-details" %}">Blog Details</a></li>{% endcomment %}
                                     <li><a href="{% url "ord" %}">Order Details</a></li>
                                 </ul>
                             </li>
