@@ -29,11 +29,11 @@ def home(request):
         total_wish=len(Wishlist.objects.filter(user=request.user))
     
     user=request.user
-    pro=Product.objects.all()[:8]
+    pro=Product.objects.all().order_by('-id')[:8]
     pt=Cetagory.objects.all()
-    bs=Best_sels.objects.all()[:4]
-    ht=hottrend.objects.all()[:4]
-    f=feature.objects.all()[:4]
+    bs=Best_sels.objects.all().order_by('-id')[:4]
+    ht=hottrend.objects.all().order_by('-id')[:4]
+    f=feature.objects.all().order_by('-id')[:4]
     ct=Cetagory.objects.get(name='Man')
     pf=Product.objects.filter(cetagory=ct)
     ma=banner.objects.filter(name='Men’s Fashion')
@@ -45,6 +45,7 @@ def home(request):
     #sub=Subscribe(user=user,email=subscribe)
     
     #sub.save()
+    
     #messages.success(request,'Congratulation SuccesFully Your Subcribtion')
     
     
